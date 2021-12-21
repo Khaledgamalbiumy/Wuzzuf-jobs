@@ -1,0 +1,41 @@
+import pandas as pd
+
+df = pd.read_csv('Wuzzuf_Jobs.csv')
+df.head()
+
+print(df.describe())
+df = df.drop_duplicates()
+df = df.dropna()
+
+print(df.groupby('Company')['Title'].count().sort_values(ascending=False))
+
+print('Most demanding companies {}'.format(list(df.groupby('Company')['Title'].count().sort_values(ascending=False).nlargest(3).index)))
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+y = np.array(df.groupby('Company')['Title'].count().sort_values(ascending=False))
+labels = np.array(df.groupby('Company')['Title'].count().sort_values(ascending=False).index)
+fig = plt.figure(figsize = (10,5))
+plt.pie(y,labels = labels)
+plt.show()
+
+print('top 5 Popular job titles {}'.format(np.array(df['Title'].value_counts().sort_values(ascending=False).nlargest(5).index)))
+
+vals = df['Title'].value_counts().sort_values(ascending=False).values
+names = df['Title'].value_counts().sort_values(ascending=False).index
+
+fig = plt.figure(figsize = (10,5))
+plt.bar(names,vals,color='maroon',width=0.4)
+plt.xlabel('job titles')
+plt.ylabel('No of jobs')
+plt.show()
+
+vals = df['Location'].value_counts().sort_values(ascending=False).values
+names = df['Location'].value_counts().sort_values(ascending=False).index
+
+fig = plt.figure(figsize = (10,5))
+plt.bar(names,vals,color='maroon',width=0.4)
+plt.xlabel('area names')
+plt.ylabel('area numbers')
+plt.show()
